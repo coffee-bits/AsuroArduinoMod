@@ -1,0 +1,43 @@
+{
+  "C_Cpp_Runner.cCompilerPath": "/home/cj/.platformio/packages/toolchain-atmelavr/bin/avr-gcc",
+  "C_Cpp_Runner.cppCompilerPath": "/home/cj/.platformio/packages/toolchain-atmelavr/bin/avr-g++",
+  "C_Cpp_Runner.debuggerPath": "/home/cj/.platformio/packages/toolchain-atmelavr/bin/avr-gdb",
+  "C_Cpp_Runner.cStandard": "c11",
+  "C_Cpp_Runner.cppStandard": "c++11",
+  "C_Cpp_Runner.msvcBatchPath": "",
+  "C_Cpp_Runner.useMsvc": false,
+  "C_Cpp_Runner.warnings": [
+    "-Wall",
+    "-Wextra",
+    "-Wpedantic"
+  ],
+  "C_Cpp_Runner.enableWarnings": true,
+  "C_Cpp_Runner.warningsAsError": false,
+  "C_Cpp_Runner.compilerArgs": [],
+  "C_Cpp_Runner.linkerArgs": [],
+  "C_Cpp_Runner.includePaths": [
+    "/home/cj/Documents/PlatformIO/Projects/Asuro/include",
+    "/home/cj/Documents/PlatformIO/Projects/Asuro/src",
+    "/home/cj/.platformio/packages/framework-arduino-avr/libraries/SoftwareSerial/src",
+    "/home/cj/Documents/PlatformIO/Projects/Asuro/.pio/libdeps/pro16MHzatmega328/DFPlayer Mini Mp3 by Makuna/src",
+    "/home/cj/.platformio/packages/framework-arduino-avr/cores/arduino",
+    "/home/cj/.platformio/packages/framework-arduino-avr/variants/eightanaloginputs",
+    "/home/cj/.platformio/packages/framework-arduino-avr/libraries/EEPROM/src",
+    "/home/cj/.platformio/packages/framework-arduino-avr/libraries/HID/src",
+    "/home/cj/.platformio/packages/framework-arduino-avr/libraries/SPI/src",
+    "/home/cj/.platformio/packages/framework-arduino-avr/libraries/Wire/src",
+    ""
+  ],
+  "C_Cpp_Runner.includeSearch": [
+    "*",
+    "**/*"
+  ],
+  "C_Cpp_Runner.excludeSearch": [
+    "**/build",
+    "**/build/**",
+    "**/.*",
+    "**/.*/**",
+    "**/.vscode",
+    "**/.vscode/**"
+  ]
+}
