@@ -50,17 +50,32 @@ constexpr int ASURO_PHOTO_T9_PIN = A3; // Asuro pin 26
 constexpr int ASURO_SWITCHES_PIN = A4; // Asuro pin 27
 constexpr int ASURO_DIVIDER_PIN = A5; // Asuro pin 28
 
-enum LED_COLOR_EN{
+/**
+ * @brief color LED color
+ * 
+ */
+enum class LED_COLOR_EN{
   LED_COLOR_RED = 0,
   LED_COLOR_GREEN = 1,
   LED_COLOR_YELLOW = 2
 };
 
-
-enum IO_STATE_EN{
+/**
+ * @brief digital state, for example LED on or off
+ * 
+ */
+enum class IO_STATE_EN{
   IO_STATE_ON = 0,
   IO_STATE_OFF = 1,
   IO_STATE_UNDEF = 2
+};
+
+
+enum class LINE_SENSOR_EN{
+  LINE_SENSOR_LEFT = 0,
+  LINE_SENSOR_RIGHT = 1,
+  LINE_SENSOR_BOTH = 2,
+  LINE_SENSOR_UNDEF = 3,
 };
 
 /**
@@ -140,40 +155,91 @@ void Asuro_initColorLed(void){
    digitalWrite(ASURO_COLOR_LED_GREEN_PIN, LOW);
 }
 
+/**
+ * @brief set the color and state (on/off) of the color LED
+ * 
+ * @param paramLedColor LED_COLOR_RED, LED_COLOR_GREEN, LED_COLOR_YELLOW 
+ * @param paramIoState IO_STATE_ON, IO_STATE_OFF
+ */
 void Asuro_setColorLed(enum LED_COLOR_EN paramLedColor, enum IO_STATE_EN paramIoState){
 
-switch (paramLedColor){
-  case LED_COLOR_RED:
-  if (IO_STATE_ON == paramIoState){
-    digitalWrite(ASURO_COLOR_LED_RED_PIN, HIGH);
+  switch (paramLedColor){
+    case LED_COLOR_EN::LED_COLOR_RED:
+    if (IO_STATE_EN::IO_STATE_ON == paramIoState){
+      digitalWrite(ASURO_COLOR_LED_RED_PIN, HIGH);
+    }
+    else{
+      digitalWrite(ASURO_COLOR_LED_RED_PIN, LOW);
+    }
+    break;
+  case LED_COLOR_EN::LED_COLOR_GREEN:
+    if (IO_STATE_EN::IO_STATE_ON == paramIoState){
+      digitalWrite(ASURO_COLOR_LED_GREEN_PIN, HIGH);
+    }
+    else{
+      digitalWrite(ASURO_COLOR_LED_GREEN_PIN, LOW);
+    }
+    break;
+  case LED_COLOR_EN::LED_COLOR_YELLOW:
+    if (IO_STATE_EN::IO_STATE_ON == paramIoState){
+      digitalWrite(ASURO_COLOR_LED_RED_PIN, HIGH);
+      digitalWrite(ASURO_COLOR_LED_GREEN_PIN, HIGH);
+    }
+    else{
+      digitalWrite(ASURO_COLOR_LED_RED_PIN, LOW);
+      digitalWrite(ASURO_COLOR_LED_GREEN_PIN, LOW);  
+    }
+    break;
+  default:
+    break;
   }
-  else{
-    digitalWrite(ASURO_COLOR_LED_RED_PIN, LOW);
-  }
-  break;
-case LED_COLOR_GREEN:
-  if (IO_STATE_ON == paramIoState){
-    digitalWrite(ASURO_COLOR_LED_GREEN_PIN, HIGH);
-  }
-  else{
-    digitalWrite(ASURO_COLOR_LED_GREEN_PIN, LOW);
-  }
-  break;
-case LED_COLOR_YELLOW:
-  if (IO_STATE_ON == paramIoState){
-    digitalWrite(ASURO_COLOR_LED_RED_PIN, HIGH);
-    digitalWrite(ASURO_COLOR_LED_GREEN_PIN, HIGH);
-  }
-  else{
-    digitalWrite(ASURO_COLOR_LED_RED_PIN, LOW);
-    digitalWrite(ASURO_COLOR_LED_GREEN_PIN, LOW);  
-  }
-
-  break;
-default:
-  break;
-
-
 }
 
+/**
+ * @brief set line LED
+ * 
+ * @param paramIoState IO_STATE_ON, IO_STATE_OFF
+ */
+void Asuro_setLineLed(enum IO_STATE_EN paramIoState){
+
+  if (IO_STATE_EN::IO_STATE_ON == paramIoState){
+    digitalWrite(ASURO_LINE_LED_PIN, HIGH);
+  }
+  else{
+    digitalWrite(ASURO_LINE_LED_PIN, LOW);
+  }
+}
+
+
+
+/**
+ * @brief reads the line sensor data
+ * 
+ * @param paramLineSensor LINE_SENSOR_LEFT, LINE_SENSOR_RIGHT, LINE_SENSOR_BOTH
+ * @return -1 in case of a parameter error, else sensor data
+ */
+int Asuro_readLineSensor(enum LINE_SENSOR_EN paramLineSensor){
+  int tempReadSensorValue = 0;
+  switch (paramLineSensor){
+    case LINE_SENSOR_EN::LINE_SENSOR_LEFT:
+      tempReadSensorValue = analogRead(ASURO_PHOTO_T10_PIN);
+    break;
+
+    case LINE_SENSOR_EN::LINE_SENSOR_RIGHT:
+      tempReadSensorValue = analogRead(ASURO_PHOTO_T9_PIN);
+    break;
+
+    case LINE_SENSOR_EN::LINE_SENSOR_BOTH:
+      tempReadSensorValue = analogRead(ASURO_PHOTO_T9_PIN);
+      tempReadSensorValue += analogRead(ASURO_PHOTO_T10_PIN);
+      tempReadSensorValue = tempReadSensorValue / 2;
+    break;
+
+    default:
+      tempReadSensorValue = -1;
+    break;  
+  }
+   
+   
+  return tempReadSensorValue;
 }
