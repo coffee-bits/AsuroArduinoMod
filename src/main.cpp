@@ -70,13 +70,27 @@ enum class IO_STATE_EN{
   IO_STATE_UNDEF = 2
 };
 
-
+/**
+ * @brief line sensor selection
+ * 
+ */
 enum class LINE_SENSOR_EN{
   LINE_SENSOR_LEFT = 0,
   LINE_SENSOR_RIGHT = 1,
   LINE_SENSOR_BOTH = 2,
   LINE_SENSOR_UNDEF = 3,
 };
+
+/**
+ * @brief motor parameters
+ * 
+ */
+struct MOTOR_SELECTION_ST{
+  uint8_t left_motor_speed;
+  uint8_t right_motor_speed;
+};
+
+
 
 /**
  * @brief main Arduino setup routine
@@ -242,4 +256,15 @@ int Asuro_readLineSensor(enum LINE_SENSOR_EN paramLineSensor){
    
    
   return tempReadSensorValue;
+}
+
+
+/**
+ * @brief set Motor Parameters
+ * 
+ * @param paramMotorSelection 
+ */
+void Asuro_setMotor(struct MOTOR_SELECTION_ST paramMotorSelection){
+
+
 }
