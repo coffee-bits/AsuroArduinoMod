@@ -86,8 +86,8 @@ enum class LINE_SENSOR_EN{
  * 
  */
 struct MOTOR_SELECTION_ST{
-  uint8_t left_motor_speed;
-  uint8_t right_motor_speed;
+  int16_t left_motor_speed;
+  int16_t right_motor_speed;
 };
 
 
@@ -262,9 +262,57 @@ int Asuro_readLineSensor(enum LINE_SENSOR_EN paramLineSensor){
 /**
  * @brief set Motor Parameters
  * 
- * @param paramMotorSelection 
+ * @param paramMotorSelection left motor speed and right motor speed, values higher than 255 are truncated, positive values direct foward, nagative backward and 0 stops
+ * 
+ * http://www.asurowiki.de/pmwiki/pmwiki.php/Main/Motorbruecke
+ * Funktion	PD5 (PB5)	PD4 (PB4)
+ * vorwärts	  1	        0
+ * rückwärts  0	        1
+ * bremsen	  0	        0
+ * leerlauf	  1	        1
+ * 
  */
 void Asuro_setMotor(struct MOTOR_SELECTION_ST paramMotorSelection){
 
+  uint16_t tempMotorSpeedLeftConversion = abs(paramMotorSelection.left_motor_speed) & 0xFF;
+  uint16_t tempMotorSpeedRightConversion = abs(paramMotorSelection.right_motor_speed) & 0xFF;
+
+  Serial.println("Set Motor Parameters");
+  pinMode(ASURO_MOTOR1_T12_PIN, OUTPUT);
+  pinMode(ASURO_MOTOR1_T34_PIN, OUTPUT);
+  pinMode(ASURO_MOTOR1_PWM_PIN, OUTPUT);
+  pinMode(ASURO_MOTOR2_T78_PIN, OUTPUT);
+  pinMode(ASURO_MOTOR2_T56_PIN, OUTPUT);  
+  pinMode(ASURO_MOTOR2_PWM_PIN, OUTPUT);
+
+  if (paramMotorSelection.left_motor_speed > 0){
+    digitalWrite(ASURO_MOTOR1_T34_PIN, HIGH);
+    digitalWrite(ASURO_MOTOR1_T34_PIN, LOW);
+    analogWrite(ASURO_MOTOR1_PWM_PIN,tempMotorSpeedLeftConversion);
+  }
+  else if (paramMotorSelection.left_motor_speed > 0){
+    digitalWrite(ASURO_MOTOR1_T34_PIN, LOW);
+    digitalWrite(ASURO_MOTOR1_T34_PIN, HIGH);
+    analogWrite(ASURO_MOTOR1_PWM_PIN,tempMotorSpeedLeftConversion);
+  } else {
+    digitalWrite(ASURO_MOTOR1_T34_PIN, LOW);
+    digitalWrite(ASURO_MOTOR1_T34_PIN, LOW);
+    analogWrite(ASURO_MOTOR1_PWM_PIN,0);
+  }
+
+  if (paramMotorSelection.right_motor_speed > 0){
+    digitalWrite(ASURO_MOTOR2_T78_PIN, HIGH);
+    digitalWrite(ASURO_MOTOR2_T56_PIN, LOW);
+    analogWrite(ASURO_MOTOR2_PWM_PIN,tempMotorSpeedRightConversion);
+  }
+  else if (paramMotorSelection.right_motor_speed > 0){
+    digitalWrite(ASURO_MOTOR2_T78_PIN, LOW);
+    digitalWrite(ASURO_MOTOR2_T56_PIN, HIGH);
+    analogWrite(ASURO_MOTOR2_PWM_PIN,tempMotorSpeedRightConversion);
+  } else {
+    digitalWrite(ASURO_MOTOR2_T78_PIN, LOW);
+    digitalWrite(ASURO_MOTOR2_T56_PIN, LOW);
+    analogWrite(ASURO_MOTOR2_PWM_PIN,0);
+  }
 
 }
