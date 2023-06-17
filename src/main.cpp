@@ -89,6 +89,11 @@ struct MOTOR_SELECTION_ST{
 };
 
 
+void Asuro_setMotor(struct MOTOR_SELECTION_ST paramMotorSelection);
+void Asuro_initBackLeds(void);
+
+
+
 
 /**
  * @brief main Arduino setup routine
@@ -140,6 +145,26 @@ void setup() {
    Serial.println(tempReadTestValue);
    delay(1000);
 
+  // initialize bacl LEDs
+  Asuro_initBackLeds();
+  // initialize motore functions
+  struct MOTOR_SELECTION_ST tempMotorSelection;
+  tempMotorSelection.left_motor_speed = 50;
+  tempMotorSelection.right_motor_speed = -50;
+  Asuro_setMotor(tempMotorSelection);
+  delay(1000);
+  tempMotorSelection.left_motor_speed = 0;
+  tempMotorSelection.left_motor_speed = 0;
+  Asuro_setMotor(tempMotorSelection);
+  delay(1000);
+  tempMotorSelection.left_motor_speed = -50;
+  tempMotorSelection.left_motor_speed = 50;
+  Asuro_setMotor(tempMotorSelection);
+  delay(1000);
+  tempMotorSelection.left_motor_speed = 0;
+  tempMotorSelection.left_motor_speed = 0;
+  Asuro_setMotor(tempMotorSelection);
+  
 }
 
 /**
@@ -152,19 +177,72 @@ void loop() {
 
 }
 
+
+void Asuro_initBackLeds(void)
+{
+  Serial.println("Set direction for LED15/16 neg. side to output");
+  pinMode(ASURO_LED15_16_NEG_PIN, OUTPUT);
+  Serial.println("Set level for LED15/16 neg. side to low");
+  digitalWrite(ASURO_LED15_16_NEG_PIN, LOW);
+
+  Serial.println("Set LED15 pin direction to output");
+  pinMode(ASURO_LED15_POS_PIN, OUTPUT);
+  Serial.println("Set LED15 pin low level");
+  digitalWrite(ASURO_LED15_POS_PIN, LOW);
+
+  Serial.println("Set LED15 pin direction to output");
+  pinMode(ASURO_LED16_POS_PIN, OUTPUT);
+  Serial.println("Set LED16 pin low level");
+  digitalWrite(ASURO_LED16_POS_PIN, LOW);
+}
+
+
+/**
+ * @brief Function to set the back LEDs to a given level (high or low)
+ * 
+ * @param paramLeftLedState set left LED to IO_STATE_EN::IO_STATE_ON or _OFF 
+ * @param paramRightLedState set right LED to IO_STATE_EN::IO_STATE_ON or _OFF
+ */
+void Asuro_setBackLeds(enum IO_STATE_EN paramLeftLedState, enum IO_STATE_EN paramRightLedState)
+{
+  Serial.println("Set direction for LED15/16 neg. side to output");
+  pinMode(ASURO_LED15_16_NEG_PIN, OUTPUT);
+  Serial.println("Set level for LED15/16 neg. side to low");
+  digitalWrite(ASURO_LED15_16_NEG_PIN, LOW);
+
+  Serial.println("Set LED15 pin direction to output");
+  pinMode(ASURO_LED15_POS_PIN, OUTPUT);
+  if (IO_STATE_EN::IO_STATE_ON == paramLeftLedState){
+    Serial.println("Set LED15 pin high level");
+    digitalWrite(ASURO_LED15_POS_PIN, HIGH);
+  
+  } else {
+    Serial.println("Set LED15 pin low level");
+    digitalWrite(ASURO_LED15_POS_PIN, LOW);
+  }
+  if (IO_STATE_EN::IO_STATE_ON == paramRightLedState){
+    Serial.println("Set LED16 pin high level");
+    digitalWrite(ASURO_LED16_POS_PIN, HIGH);
+  
+  } else {
+    Serial.println("Set LED16 pin low level");
+    digitalWrite(ASURO_LED16_POS_PIN, LOW);
+  }
+}
+
 /**
  * @brief inits the color LED with red and green and sets the output to low
  * 
  */
 void Asuro_initColorLed(void){
- Serial.println("Set Color LED red to output");
-   pinMode(ASURO_COLOR_LED_RED_PIN, OUTPUT);
-   Serial.println("Set Color LED red to low");
-   digitalWrite(ASURO_COLOR_LED_RED_PIN, LOW);
-   Serial.println("Set Color LED green to output");
-   pinMode(ASURO_COLOR_LED_GREEN_PIN, OUTPUT);
-   Serial.println("Set Color LED green to low");
-   digitalWrite(ASURO_COLOR_LED_GREEN_PIN, LOW);
+  Serial.println("Set Color LED red to output");
+  pinMode(ASURO_COLOR_LED_RED_PIN, OUTPUT);
+  Serial.println("Set Color LED red to low");
+  digitalWrite(ASURO_COLOR_LED_RED_PIN, LOW);
+  Serial.println("Set Color LED green to output");
+  pinMode(ASURO_COLOR_LED_GREEN_PIN, OUTPUT);
+  Serial.println("Set Color LED green to low");
+  digitalWrite(ASURO_COLOR_LED_GREEN_PIN, LOW);
 }
 
 /**
