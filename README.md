@@ -18,4 +18,4 @@ My choice was then a Arduino pro micro which uses 5V logic level, has an USB ser
 ### The old motors are dead
 I had to replace the old motors with newer ones. I found a nice and cheap all in one solution...that does not fit and needs a holding frame. So I constructed a frame prototype:
 
-![Asuro Robot Motor Hold](doc/Asuro Robot Motor Hold.jpg)
+![Asuro Robot Motor Hold](/doc/Asuro%20Robot%20Motor%20Hold.png)
