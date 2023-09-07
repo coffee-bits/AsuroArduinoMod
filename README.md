@@ -56,6 +56,6 @@ All hardware interfaces of the Asuro have been connected to according pins of th
 
 > Prototype state
 
-![Asuro Prototype 1.1](doc\AsuroRework1.jpg)
-![Asuro Prototype 1.2](doc\AsuroRework2.jpg)
-![Asuro Prototype 1.3](doc\AsuroRework3.jpg)
+![Asuro Prototype 1.1](/doc/AsuroRework1.jpg)
+![Asuro Prototype 1.2](/doc/AsuroRework2.jpg)
+![Asuro Prototype 1.3](/doc/AsuroRework3.jpg)
