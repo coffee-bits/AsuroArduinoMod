@@ -20,7 +20,7 @@ constexpr int ASURO_IR_REC_SFH5110_PIN = 2; // Asuro pin 2
 // "IR Diode - SFH 415-U" GND                  // Asuro pin 3
 constexpr int ASURO_COLOR_LED_RED_PIN = 7; // Asuro pin 4
 constexpr int ASURO_SWITCH_INT_PIN = 3; // Asuro pin 5
-constexpr int ASURO_MOTOR1_T12_PIN = 9; // Asuro pin 6
+constexpr int ASURO_MOTOR1_T12_PIN = 11; // Asuro pin 6
 // VCC    // Asuro pin 7
 // GND    // Asuro pin 8
 // quarz  // Asuro pin 9
@@ -149,20 +149,20 @@ void setup() {
   Asuro_initBackLeds();
   // initialize motore functions
   struct MOTOR_SELECTION_ST tempMotorSelection;
-  tempMotorSelection.left_motor_speed = 50;
-  tempMotorSelection.right_motor_speed = -50;
+  tempMotorSelection.left_motor_speed = 180;
+  tempMotorSelection.right_motor_speed = -180;
   Asuro_setMotor(tempMotorSelection);
-  delay(1000);
+  delay(10000);
   tempMotorSelection.left_motor_speed = 0;
-  tempMotorSelection.left_motor_speed = 0;
+  tempMotorSelection.right_motor_speed = 0;
   Asuro_setMotor(tempMotorSelection);
-  delay(1000);
-  tempMotorSelection.left_motor_speed = -50;
-  tempMotorSelection.left_motor_speed = 50;
+  delay(10000);
+  tempMotorSelection.left_motor_speed = -180;
+  tempMotorSelection.right_motor_speed = 180;
   Asuro_setMotor(tempMotorSelection);
-  delay(1000);
+  delay(10000);
   tempMotorSelection.left_motor_speed = 0;
-  tempMotorSelection.left_motor_speed = 0;
+  tempMotorSelection.right_motor_speed = 0;
   Asuro_setMotor(tempMotorSelection);
   
 }
@@ -349,7 +349,11 @@ int Asuro_readLineSensor(enum LINE_SENSOR_EN paramLineSensor){
  * 
  */
 void Asuro_setMotor(struct MOTOR_SELECTION_ST paramMotorSelection){
-
+  Serial.print("Input-Parameter: ");
+  Serial.print(paramMotorSelection.left_motor_speed);
+  Serial.print(",");
+  Serial.println(paramMotorSelection.right_motor_speed);
+  
   uint16_t tempMotorSpeedLeftConversion = abs(paramMotorSelection.left_motor_speed) & 0xFF;
   uint16_t tempMotorSpeedRightConversion = abs(paramMotorSelection.right_motor_speed) & 0xFF;
 
@@ -362,30 +366,40 @@ void Asuro_setMotor(struct MOTOR_SELECTION_ST paramMotorSelection){
   pinMode(ASURO_MOTOR2_PWM_PIN, OUTPUT);
 
   if (paramMotorSelection.left_motor_speed > 0){
-    digitalWrite(ASURO_MOTOR1_T34_PIN, HIGH);
+    Serial.print("left motor speed > 0: T12=high;T34=low: ");
+    Serial.println(tempMotorSpeedLeftConversion);
+    digitalWrite(ASURO_MOTOR1_T12_PIN, HIGH);
     digitalWrite(ASURO_MOTOR1_T34_PIN, LOW);
     analogWrite(ASURO_MOTOR1_PWM_PIN,tempMotorSpeedLeftConversion);
   }
-  else if (paramMotorSelection.left_motor_speed > 0){
-    digitalWrite(ASURO_MOTOR1_T34_PIN, LOW);
+  else if (paramMotorSelection.left_motor_speed < 0){
+    Serial.print("left motor speed < 0: T12=low;T34=high: -");
+    Serial.println(tempMotorSpeedLeftConversion);
+    digitalWrite(ASURO_MOTOR1_T12_PIN, LOW);
     digitalWrite(ASURO_MOTOR1_T34_PIN, HIGH);
     analogWrite(ASURO_MOTOR1_PWM_PIN,tempMotorSpeedLeftConversion);
   } else {
-    digitalWrite(ASURO_MOTOR1_T34_PIN, LOW);
+    Serial.println("left motor speed < 0: T12=low;T34=low: 0");
+    digitalWrite(ASURO_MOTOR1_T12_PIN, LOW);
     digitalWrite(ASURO_MOTOR1_T34_PIN, LOW);
     analogWrite(ASURO_MOTOR1_PWM_PIN,0);
   }
 
   if (paramMotorSelection.right_motor_speed > 0){
+    Serial.print("right motor speed > 0: T78=high;T56=low: ");
+    Serial.println(tempMotorSpeedRightConversion);
     digitalWrite(ASURO_MOTOR2_T78_PIN, HIGH);
     digitalWrite(ASURO_MOTOR2_T56_PIN, LOW);
     analogWrite(ASURO_MOTOR2_PWM_PIN,tempMotorSpeedRightConversion);
   }
-  else if (paramMotorSelection.right_motor_speed > 0){
+  else if (paramMotorSelection.right_motor_speed < 0){
+    Serial.print("right motor speed < 0: T78=low;T56=high: -");
+    Serial.println(tempMotorSpeedRightConversion);
     digitalWrite(ASURO_MOTOR2_T78_PIN, LOW);
     digitalWrite(ASURO_MOTOR2_T56_PIN, HIGH);
     analogWrite(ASURO_MOTOR2_PWM_PIN,tempMotorSpeedRightConversion);
   } else {
+    Serial.println("right motor speed < 0: T78=low;T56=low: 0");
     digitalWrite(ASURO_MOTOR2_T78_PIN, LOW);
     digitalWrite(ASURO_MOTOR2_T56_PIN, LOW);
     analogWrite(ASURO_MOTOR2_PWM_PIN,0);
