@@ -91,7 +91,7 @@ struct MOTOR_SELECTION_ST{
 
 void Asuro_setMotor(struct MOTOR_SELECTION_ST paramMotorSelection);
 void Asuro_initBackLeds(void);
-
+void Asuro_setBackLeds(enum IO_STATE_EN paramLeftLedState, enum IO_STATE_EN paramRightLedState);
 
 
 
@@ -145,8 +145,17 @@ void setup() {
    Serial.println(tempReadTestValue);
    delay(1000);
 
-  // initialize bacl LEDs
+  // initialize back LEDs
   Asuro_initBackLeds();
+  delay(5000);
+  Asuro_setBackLeds(IO_STATE_EN::IO_STATE_ON, IO_STATE_EN::IO_STATE_OFF);
+  delay(5000);
+  Asuro_setBackLeds(IO_STATE_EN::IO_STATE_OFF, IO_STATE_EN::IO_STATE_ON);
+  delay(5000);
+  Asuro_setBackLeds(IO_STATE_EN::IO_STATE_ON, IO_STATE_EN::IO_STATE_ON);
+  delay(5000);
+  Asuro_setBackLeds(IO_STATE_EN::IO_STATE_OFF, IO_STATE_EN::IO_STATE_OFF);
+
   // initialize motore functions
   struct MOTOR_SELECTION_ST tempMotorSelection;
   tempMotorSelection.left_motor_speed = 180;
